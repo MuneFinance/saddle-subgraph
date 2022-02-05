@@ -9,7 +9,7 @@ import {
   StopRampA,
   TokenSwap,
   TokenSwapUnderlying,
-} from "../../generated/SUSDMetaPool/MetaSwap"
+} from "../../generated/MuneFRAXMetaPool/MetaSwap"
 import {
   AddLiquidityEvent,
   NewAdminFeeEvent,

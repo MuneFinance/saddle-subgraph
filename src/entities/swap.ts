@@ -1,11 +1,10 @@
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts"
 
 import { Swap } from "../../generated/schema"
-import { SwapFlashLoan } from "../../generated/USDPool/SwapFlashLoan"
-import { SwapFlashLoanNoWithdrawFee } from "../../generated/ALETHPool/SwapFlashLoanNoWithdrawFee"
+import { SwapFlashLoanNoWithdrawFee } from "../../generated/MuneUSDPool/SwapFlashLoanNoWithdrawFee"
 import { getOrCreateToken } from "./token"
 import { getSystemInfo } from "./system"
-import { MetaSwap } from "../../generated/SUSDMetaPool/MetaSwap"
+import { MetaSwap } from "../../generated/MuneFRAXMetaPool/MetaSwap"
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
@@ -59,55 +58,55 @@ export function getOrCreateSwap(
 }
 
 // Gets poll info from swap contract
-export function getSwapInfo(swap: Address): SwapInfo {
-  let swapContract = SwapFlashLoan.bind(swap)
+// export function getSwapInfo(swap: Address): SwapInfo {
+//   let swapContract = SwapFlashLoan.bind(swap)
 
-  let tokens: Address[] = []
-  let balances: BigInt[] = []
+//   let tokens: Address[] = []
+//   let balances: BigInt[] = []
 
-  let t: ethereum.CallResult<Address>
-  let b: ethereum.CallResult<BigInt>
+//   let t: ethereum.CallResult<Address>
+//   let b: ethereum.CallResult<BigInt>
 
-  let i = 0
+//   let i = 0
 
-  do {
-    t = swapContract.try_getToken(i)
-    b = swapContract.try_getTokenBalance(i)
+//   do {
+//     t = swapContract.try_getToken(i)
+//     b = swapContract.try_getTokenBalance(i)
 
-    if (!t.reverted && t.value.toHexString() != ZERO_ADDRESS) {
-      tokens.push(t.value)
-    }
+//     if (!t.reverted && t.value.toHexString() != ZERO_ADDRESS) {
+//       tokens.push(t.value)
+//     }
 
-    if (!b.reverted) {
-      balances.push(b.value)
-    }
+//     if (!b.reverted) {
+//       balances.push(b.value)
+//     }
 
-    i++
-  } while (!t.reverted && !b.reverted)
+//     i++
+//   } while (!t.reverted && !b.reverted)
 
-  return {
-    tokens,
-    balances,
-    A: swapContract.getA(),
-    swapFee: swapContract.swapStorage().value4,
-    adminFee: swapContract.swapStorage().value5,
-    withdrawFee: swapContract.swapStorage().value6,
-    virtualPrice: swapContract.getVirtualPrice(),
-    owner: swapContract.owner(),
-    lpToken: swapContract.swapStorage().value7,
-  }
-}
+//   return {
+//     tokens,
+//     balances,
+//     A: swapContract.getA(),
+//     swapFee: swapContract.swapStorage().value4,
+//     adminFee: swapContract.swapStorage().value5,
+//     withdrawFee: swapContract.swapStorage().value6,
+//     virtualPrice: swapContract.getVirtualPrice(),
+//     owner: swapContract.owner(),
+//     lpToken: swapContract.swapStorage().value7,
+//   }
+// }
 
-export function getBalances(swap: Address, N_COINS: number): BigInt[] {
-  let swapContract = SwapFlashLoan.bind(swap)
-  let balances = new Array<BigInt>(<i32>N_COINS)
+// export function getBalances(swap: Address, N_COINS: number): BigInt[] {
+//   let swapContract = SwapFlashLoan.bind(swap)
+//   let balances = new Array<BigInt>(<i32>N_COINS)
 
-  for (let i = 0; i < N_COINS; ++i) {
-    balances[i] = swapContract.getTokenBalance(i)
-  }
+//   for (let i = 0; i < N_COINS; ++i) {
+//     balances[i] = swapContract.getTokenBalance(i)
+//   }
 
-  return balances
-}
+//   return balances
+// }
 
 export function getOrCreateSwapNoWithdrawFee(
   address: Address,
